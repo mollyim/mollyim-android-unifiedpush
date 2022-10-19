@@ -1331,6 +1331,15 @@
         android:enabled="@bool/enable_alarm_manager"
         android:exported="false"/>
 
+    <receiver android:exported="true"  android:enabled="true"  android:name="im.molly.unifiedpush.receiver.UnifiedPushReceiver">
+        <intent-filter>
+            <action android:name="org.unifiedpush.android.connector.MESSAGE"/>
+            <action android:name="org.unifiedpush.android.connector.UNREGISTERED"/>
+            <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT"/>
+            <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED"/>
+        </intent-filter>
+    </receiver>
+
     <service
         android:name=".service.webrtc.ActiveCallManager$ActiveCallForegroundService"
         android:exported="false"
