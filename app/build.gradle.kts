@@ -517,6 +517,8 @@ dependencies {
   implementation(libs.gosimple.nbvcxz)
   "fossImplementation"("org.osmdroid:osmdroid-android:6.1.16")
 
+  implementation(libs.unifiedpush.connector)
+
   "spinnerImplementation"(project(":spinner"))
 
   "instrumentationImplementation"(libs.androidx.fragment.testing) {
