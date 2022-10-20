@@ -1,6 +1,7 @@
 package org.thoughtcrime.securesms.keyvalue
 
 import androidx.annotation.VisibleForTesting
+import im.molly.unifiedpush.helper.UnifiedPushHelper
 import org.signal.core.util.Base64
 import org.signal.core.util.logging.Log
 import org.signal.libsignal.protocol.IdentityKey
@@ -319,7 +320,7 @@ class AccountValues internal constructor(store: KeyValueStore) : SignalStoreValu
 
   @get:JvmName("isPushAvailable")
   val pushAvailable: Boolean
-    get() = fcmEnabled
+    get() = fcmEnabled || UnifiedPushHelper.isUnifiedPushEnabled()
 
   /** The FCM token, which allows the server to send us FCM messages. */
   var fcmToken: String?
