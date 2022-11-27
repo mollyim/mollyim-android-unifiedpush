@@ -121,7 +121,7 @@ import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.Util;
 import org.thoughtcrime.securesms.util.dynamiclanguage.DynamicLanguageContextWrapper;
 
-import im.molly.unifiedpush.helper.UnifiedPushHelper;
+import im.molly.unifiedpush.util.UnifiedPushHelper;
 import java.io.InterruptedIOException;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
@@ -509,7 +509,7 @@ public class ApplicationContext extends Application implements AppForegroundObse
 
     PlayServicesUtil.PlayServicesStatus fcmStatus = PlayServicesUtil.getPlayServicesStatus(this);
 
-    if (UnifiedPushHelper.isUnifiedPushEnabled()
+    if (UnifiedPushHelper.isUnifiedPushAvailable()
         || fcmStatus == PlayServicesUtil.PlayServicesStatus.DISABLED) {
       if (SignalStore.account().isFcmEnabled()) {
         Log.i(TAG, "Play Services are disabled. Disabling FCM.");
