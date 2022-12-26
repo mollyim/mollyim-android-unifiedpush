@@ -43,7 +43,7 @@ class MollySocketLinkedDevice {
 
   private fun isDeviceLinked(): Boolean? {
     val device = SignalStore.unifiedpush.device ?: return false
-    var devices : List<Device>? = emptyList()
+    val devices: List<Device>?
     try {
       devices = DeviceListLoader(context, AppDependencies.signalServiceAccountManager).loadInBackground()
     } catch (e: IOException) {
