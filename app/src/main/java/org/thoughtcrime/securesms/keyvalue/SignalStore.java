@@ -11,8 +11,6 @@ import org.thoughtcrime.securesms.util.SignalUncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-import im.molly.unifiedpush.store.UnifiedPushValues;
-
 /**
  * Simple, encrypted key-value store.
  */
@@ -93,7 +91,7 @@ public final class SignalStore {
     this.storyValues               = new StoryValues(store);
     this.apkUpdate                 = new ApkUpdateValues(store);
     this.plainTextValues           = new PlainTextSharedPrefsDataStore(ApplicationDependencies.getApplication());
-    this.unifiedPushValues         = new UnifiedPushValues();
+    this.unifiedPushValues         = new UnifiedPushValues(store);
   }
 
   public static void onFirstEverAppLaunch() {
