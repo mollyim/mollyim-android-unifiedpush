@@ -2,7 +2,6 @@ package org.thoughtcrime.securesms.keyvalue
 
 import androidx.annotation.VisibleForTesting
 import androidx.preference.PreferenceDataStore
-import im.molly.unifiedpush.store.UnifiedPushValues
 import org.signal.core.util.ResettableLazy
 import org.thoughtcrime.securesms.database.KeyValueDatabase
 import org.thoughtcrime.securesms.dependencies.AppDependencies.application
@@ -39,7 +38,7 @@ class SignalStore(private val store: KeyValueStore) {
   val storyValues = StoryValues(store)
   val apkUpdateValues = ApkUpdateValues(store)
   val backupValues = BackupValues(store)
-  val unifiedPushValues = UnifiedPushValues()
+  val unifiedPushValues = UnifiedPushValues(store)
 
   val plainTextValues = PlainTextSharedPrefsDataStore(application)
 
