@@ -468,16 +468,19 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
     }
   }
 
+  // MOLLY: this initialize FCM, websocket and UnifiedPush
   public void initializeFcmCheck() {
     if (!SignalStore.account().isRegistered()) {
       return;
     }
 
     PlayServicesUtil.PlayServicesStatus fcmStatus = PlayServicesUtil.getPlayServicesStatus(this);
+    boolean unifiedPushAvailable                  = UnifiedPushHelper.isUnifiedPushAvailable();
+    boolean forceWebSocket                        = SignalStore.internalValues().isWebsocketModeForced();
 
-    if (UnifiedPushHelper.isUnifiedPushAvailable()
+    if (unifiedPushAvailable || forceWebSocket
         || fcmStatus == PlayServicesUtil.PlayServicesStatus.DISABLED) {
-      if (!SignalStore.unifiedpush().getAirGaped()) {
+      if (unifiedPushAvailable && !SignalStore.unifiedpush().getAirGaped()) {
         ApplicationDependencies.getJobManager().add(new UnifiedPushRefreshJob());
       }
       ApplicationDependencies.getJobManager().cancel(new FcmRefreshJob().getId());
@@ -495,12 +498,10 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
                SignalStore.account().getFcmTokenLastSetTime() < 0) {
       Log.i(TAG, "Play Services are newly-available. Updating to use FCM.");
       SignalStore.account().setFcmEnabled(true);
-      ApplicationDependencies.getJobManager().cancel(new UnifiedPushRefreshJob().getId());
       ApplicationDependencies.getJobManager().startChain(new FcmRefreshJob())
                                              .then(new RefreshAttributesJob())
                                              .enqueue();
     } else {
-      ApplicationDependencies.getJobManager().cancel(new UnifiedPushRefreshJob().getId());
       long nextSetTime = SignalStore.account().getFcmTokenLastSetTime() + TimeUnit.HOURS.toMillis(6);
 
       if (SignalStore.account().getFcmToken() == null || nextSetTime <= System.currentTimeMillis()) {

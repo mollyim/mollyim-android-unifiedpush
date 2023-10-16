@@ -7,13 +7,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import im.molly.unifiedpush.events.UnifiedPushRegistrationEvent
+import im.molly.unifiedpush.jobs.UnifiedPushRefreshJob
 import im.molly.unifiedpush.model.UnifiedPushStatus
-import im.molly.unifiedpush.model.saveStatus
 import im.molly.unifiedpush.util.MollySocketRequest
 import org.greenrobot.eventbus.Subscribe
 import org.signal.core.util.concurrent.SignalExecutors
 import org.signal.core.util.logging.Log
 import org.thoughtcrime.securesms.R
+import org.thoughtcrime.securesms.dependencies.ApplicationDependencies
 import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.util.concurrent.SerialMonoLifoExecutor
 import org.thoughtcrime.securesms.util.livedata.Store
@@ -29,8 +30,10 @@ class UnifiedPushSettingsViewModel(private val application: Application) : ViewM
   val state: LiveData<UnifiedPushSettingsState> = store.stateLiveData
 
   @Subscribe
-  fun onNewEndpoint(e: UnifiedPushRegistrationEvent) {
-    processNewStatus()
+  fun onStatusRefreshed(e: UnifiedPushRegistrationEvent) {
+    Log.d(TAG, "Received event to refresh.")
+    status = SignalStore.unifiedpush().status
+    store.update { getState() }
   }
 
   private fun getState(): UnifiedPushSettingsState {
@@ -104,40 +107,21 @@ class UnifiedPushSettingsViewModel(private val application: Application) : ViewM
     } else {
       url
     }
-    processNewStatus()
+    EXECUTOR.enqueue {
+      SignalStore.unifiedpush().mollySocketFound = try {
+        MollySocketRequest.discoverMollySocketServer()
+      } catch (e: Exception) {
+        SignalStore.unifiedpush().mollySocketInternalError = true
+        false
+      }
+      processNewStatus()
+    }
   }
 
   private fun processNewStatus() {
-    status = SignalStore.unifiedpush().status
-    if (SignalStore.unifiedpush().status in listOf(
-        UnifiedPushStatus.OK,
-        UnifiedPushStatus.FORBIDDEN_UUID,
-        UnifiedPushStatus.INTERNAL_ERROR,
-        UnifiedPushStatus.SERVER_NOT_FOUND_AT_URL,
-      )
-    ) {
-      Log.d(TAG, "Trying to register to MollySocket")
-      status = UnifiedPushStatus.PENDING
-      EXECUTOR.enqueue {
-        try {
-          if (MollySocketRequest.discoverMollySocketServer()) {
-            SignalStore.unifiedpush().mollySocketFound = true
-            MollySocketRequest.registerToMollySocketServer().saveStatus()
-            status = SignalStore.unifiedpush().status
-          } else {
-            SignalStore.unifiedpush().mollySocketFound = false
-            status = SignalStore.unifiedpush().status
-          }
-        } catch (e: Exception) {
-          SignalStore.unifiedpush().mollySocketFound = false
-          status = UnifiedPushStatus.INTERNAL_ERROR
-        }
-        store.update { getState() }
-      }
-    } else {
-      status = SignalStore.unifiedpush().status
-    }
+    SignalStore.unifiedpush().pending = true
     store.update { getState() }
+    ApplicationDependencies.getJobManager().add(UnifiedPushRefreshJob())
   }
 
   class Factory(private val application: Application) : ViewModelProvider.Factory {
