@@ -28,7 +28,7 @@ object UnifiedPushHelper {
   @JvmStatic
   fun isUnifiedPushAvailable(): Boolean {
     return SignalStore.account().isRegistered &&
-      SignalStore.unifiedpush().status in listOf(UnifiedPushStatus.OK, UnifiedPushStatus.AIR_GAPED)
+      SignalStore.unifiedpush().status in listOf(UnifiedPushStatus.OK, UnifiedPushStatus.AIR_GAPPED)
   }
 
   @JvmStatic

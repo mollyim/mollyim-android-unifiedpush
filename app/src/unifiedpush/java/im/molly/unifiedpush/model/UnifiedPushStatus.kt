@@ -2,7 +2,7 @@ package im.molly.unifiedpush.model
 
 enum class UnifiedPushStatus {
   DISABLED,
-  AIR_GAPED,
+  AIR_GAPPED,
   SERVER_NOT_FOUND_AT_URL,
   MISSING_ENDPOINT,
   FORBIDDEN_UUID,

@@ -128,7 +128,7 @@ class NotificationsSettingsViewModel(private val sharedPreferences: SharedPrefer
       } ?: return
     } else {
       UnifiedPush.unregisterApp(context)
-      SignalStore.unifiedpush().airGaped = false
+      SignalStore.unifiedpush().airGapped = false
       ApplicationDependencies.getJobManager().add(UnifiedPushRefreshJob())
     }
     refresh()

@@ -17,7 +17,7 @@ internal class UnifiedPushValues(store: KeyValueStore) : SignalStoreValues(store
     private const val UNIFIEDPUSH_ENDPOINT = "unifiedpush.endpoint"
     private const val UNIFIEDPUSH_ENABLED = "unifiedpush.enabled"
     private const val UNIFIEDPUSH_PENDING = "unifiedpush.pending"
-    private const val UNIFIEDPUSH_AIR_GAPED = "unifiedpush.air_gaped"
+    private const val UNIFIEDPUSH_AIR_GAPPED = "unifiedpush.air_gapped"
   }
 
   override fun onFirstEverAppLaunch() = Unit
@@ -48,7 +48,7 @@ internal class UnifiedPushValues(store: KeyValueStore) : SignalStoreValues(store
 
   var pending: Boolean by booleanValue(UNIFIEDPUSH_PENDING, false)
 
-  var airGaped: Boolean by booleanValue(UNIFIEDPUSH_AIR_GAPED, false)
+  var airGapped: Boolean by booleanValue(UNIFIEDPUSH_AIR_GAPPED, false)
 
   var mollySocketUrl: String? by stringValue(MOLLYSOCKET_URL, null)
 
@@ -66,7 +66,7 @@ internal class UnifiedPushValues(store: KeyValueStore) : SignalStoreValues(store
       SignalStore.unifiedpush().pending -> UnifiedPushStatus.PENDING
       SignalStore.unifiedpush().device == null -> UnifiedPushStatus.LINK_DEVICE_ERROR
       SignalStore.unifiedpush().endpoint == null -> UnifiedPushStatus.MISSING_ENDPOINT
-      SignalStore.unifiedpush().airGaped -> UnifiedPushStatus.AIR_GAPED
+      SignalStore.unifiedpush().airGapped -> UnifiedPushStatus.AIR_GAPPED
       SignalStore.unifiedpush().mollySocketUrl.isNullOrBlank() ||
         !SignalStore.unifiedpush().mollySocketFound -> UnifiedPushStatus.SERVER_NOT_FOUND_AT_URL
       SignalStore.unifiedpush().mollySocketInternalError -> UnifiedPushStatus.INTERNAL_ERROR

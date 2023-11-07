@@ -480,7 +480,7 @@ public class ApplicationContext extends MultiDexApplication implements AppForegr
 
     if (unifiedPushAvailable || forceWebSocket
         || fcmStatus == PlayServicesUtil.PlayServicesStatus.DISABLED) {
-      if (unifiedPushAvailable && !SignalStore.unifiedpush().getAirGaped()) {
+      if (unifiedPushAvailable && !SignalStore.unifiedpush().getAirGapped()) {
         ApplicationDependencies.getJobManager().add(new UnifiedPushRefreshJob());
       }
       ApplicationDependencies.getJobManager().cancel(new FcmRefreshJob().getId());

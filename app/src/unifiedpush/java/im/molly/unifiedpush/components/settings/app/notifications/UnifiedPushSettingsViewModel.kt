@@ -77,7 +77,7 @@ class UnifiedPushSettingsViewModel(private val application: Application) : ViewM
     }
 
     return UnifiedPushSettingsState(
-      airGaped = SignalStore.unifiedpush().airGaped,
+      airGapped = SignalStore.unifiedpush().airGapped,
       device = SignalStore.unifiedpush().device,
       distributors = distributors,
       selected = selected,
@@ -88,8 +88,8 @@ class UnifiedPushSettingsViewModel(private val application: Application) : ViewM
     )
   }
 
-  fun setUnifiedPushAirGaped(airGaped: Boolean) {
-    SignalStore.unifiedpush().airGaped = airGaped
+  fun setUnifiedPushAirGapped(airGapped: Boolean) {
+    SignalStore.unifiedpush().airGapped = airGapped
     processNewStatus()
   }
 

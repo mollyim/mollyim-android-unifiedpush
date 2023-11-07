@@ -72,8 +72,8 @@ class UnifiedPushRefreshJob private constructor(parameters: Parameters) : BaseJo
         reInitializeNotificationServices()
       }
       // Considered as successful setup
-      UnifiedPushStatus.AIR_GAPED -> {
-        Log.i(TAG, "UnifiedPush available in AirGaped mode. No MollySocket to register to.")
+      UnifiedPushStatus.AIR_GAPPED -> {
+        Log.i(TAG, "UnifiedPush available in AirGapped mode. No MollySocket to register to.")
         reInitializeNotificationServices()
       }
       // We try to register to MollySocket server,

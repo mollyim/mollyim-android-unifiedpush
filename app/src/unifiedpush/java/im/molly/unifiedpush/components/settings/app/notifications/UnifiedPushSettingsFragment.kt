@@ -60,15 +60,15 @@ class UnifiedPushSettingsFragment : DSLSettingsFragment(R.string.NotificationsSe
       dividerPref()
 
       switchPref(
-        title = DSLSettingsText.from(getString(R.string.UnifiedPushSettingsFragment__air_gaped)),
-        summary = DSLSettingsText.from(getString(R.string.UnifiedPushSettingsFragment__air_gaped_summary)),
-        isChecked = state.airGaped,
+        title = DSLSettingsText.from(getString(R.string.UnifiedPushSettingsFragment__air_gapped)),
+        summary = DSLSettingsText.from(getString(R.string.UnifiedPushSettingsFragment__air_gapped_summary)),
+        isChecked = state.airGapped,
         onClick = {
-          viewModel.setUnifiedPushAirGaped(!state.airGaped)
+          viewModel.setUnifiedPushAirGapped(!state.airGapped)
         }
       )
 
-      if (state.airGaped) {
+      if (state.airGapped) {
 
         clickPref(
           title = DSLSettingsText.from(getString(R.string.UnifiedPushSettingsFragment__server_parameters)),
@@ -147,7 +147,7 @@ class UnifiedPushSettingsFragment : DSLSettingsFragment(R.string.NotificationsSe
     return when (state.status) {
       UnifiedPushStatus.DISABLED -> getString(R.string.UnifiedPushSettingsFragment__status_summary_disabled)
       UnifiedPushStatus.LINK_DEVICE_ERROR -> getString(R.string.UnifiedPushSettingsFragment__status_summary_linked_device_error)
-      UnifiedPushStatus.AIR_GAPED -> getString(R.string.UnifiedPushSettingsFragment__status_summary_air_gaped)
+      UnifiedPushStatus.AIR_GAPPED -> getString(R.string.UnifiedPushSettingsFragment__status_summary_air_gapped)
       UnifiedPushStatus.SERVER_NOT_FOUND_AT_URL -> getString(R.string.UnifiedPushSettingsFragment__status_summary_mollysocket_server_not_found)
       UnifiedPushStatus.MISSING_ENDPOINT -> getString(R.string.UnifiedPushSettingsFragment__status_summary_missing_endpoint)
       UnifiedPushStatus.FORBIDDEN_UUID -> getString(R.string.UnifiedPushSettingsFragment__status_summary_forbidden_uuid)

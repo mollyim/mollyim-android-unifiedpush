@@ -29,9 +29,9 @@ class UnifiedPushNotificationBuilder(val context: Context) {
       .notify(NOTIFICATION_ID_UNIFIEDPUSH, getNotification(context.getString(R.string.UnifiedPushNotificationBuilder__mollysocket_registration_changed)))
   }
 
-  fun setNotificationEndpointChangedAirGaped() {
+  fun setNotificationEndpointChangedAirGapped() {
     (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
-      .notify(NOTIFICATION_ID_UNIFIEDPUSH, getNotification(context.getString(R.string.UnifiedPushNotificationBuilder__endpoint_changed_airgaped)))
+      .notify(NOTIFICATION_ID_UNIFIEDPUSH, getNotification(context.getString(R.string.UnifiedPushNotificationBuilder__endpoint_changed_airgapped)))
   }
 
   fun setNotificationEndpointChangedError() {
