@@ -22,7 +22,7 @@ You can download the app from GitHub's [Releases](https://github.com/mollyim/mol
     alt="Get it on F-Droid"
     height="80">](https://molly.im/fdroid/)
 
-There are two flavors to choose from download: **Molly** or **Molly-FOSS**. Learn the differences [below](#free-and-open-source) and download the right one for you.
+There are three flavors to choose from download: **Molly**, **Molly-FOSS**, or **Molly-UnifiedPush** (**Molly-UP**). Learn the differences [below](#free-and-open-source) and download the right one for you.
 
 You can also download **Molly-FOSS** from [Accrescent](https://accrescent.app/):
 
@@ -59,20 +59,25 @@ For the [UnifiedPush](https://github.com/mollyim/mollyim-android-unifiedpush) ve
 
 - **UnifiedPush support**: Receive push notifications through the UnifiedPush protocol
 
+> [!IMPORTANT]  
+> Molly-UP **requires** an instance of [mollysocket](https://github.com/mollyim/mollysocket) to work with a UnifiedPush provider. This can be done on a machine you control.
+
+In addition, UnifiedPush is not currently available on linked devices.
+
 Besides that, you will find all the features of Signal plus some minor tweaks and improvements. As with Signal, SMS is not supported.  
 
 ## Free and Open-Source
 
 Molly is open-source just like Signal. But Signal uses Google's proprietary software to provide some key features.
 
-To support a 100% free and auditable app, Molly comes in two flavors: one with proprietary blobs like Signal and one without. They are called Molly and Molly-FOSS, respectively. You can install the flavor of your choice at any time, and it will replace any previously installed version. The data and settings will be preserved so that you do not have to re-register.
+To support a 100% free and auditable app, Molly comes in three flavors: one with proprietary blobs like Signal, one without, and one with UnifiedPush support. They are called Molly, Molly-FOSS, and Molly-UP, respectively. You can install the flavor of your choice at any time, and it will replace any previously installed version. The data and settings will be preserved so that you do not have to re-register.
 
 This table lists the current status of the dependencies:
 
-| Feature                               | Molly-FOSS      | Molly                | Signal               |
-| ------------------------------------- | --------------- | -------------------- | -------------------- |
-| Push notifications <sup>(1) (2)</sup> | ✔️ Websocket     | ⚠️ FCM<br>✔️ Websocket | ⚠️ FCM<br>✔️ Websocket |
-| Location provider                     | ✔️ OpenStreetMap | ⚠️ Google Maps        | ⚠️️️ Google Maps        |
+| Feature                               |Molly-UP | Molly-FOSS      | Molly                | Signal               |
+| ------------------------------------- | ---------------  | --------------- | -------------------- | -------------------- |
+| Push notifications <sup>(1) (2)</sup> | ✔️ UnifiedPush<br>✔️ Websocket     | ✔️ Websocket     | ⚠️ FCM<br>✔️ Websocket | ⚠️ FCM<br>✔️ Websocket |
+| Location provider                     | ✔️ OpenStreetMap | ✔️ OpenStreetMap | ⚠️ Google Maps        | ⚠️️️ Google Maps        |
 
 <sup>(1)</sup> You may need to disable the system battery optimizations to receive Websocket-based push notifications in background.<br>
 <sup>(2)</sup> If you are running a custom operating system and the app fails to register with Play Services (FCM) try the FOSS flavor.
