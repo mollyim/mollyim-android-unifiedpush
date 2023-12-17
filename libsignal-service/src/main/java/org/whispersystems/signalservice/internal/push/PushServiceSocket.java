@@ -3270,12 +3270,6 @@ public class PushServiceSocket {
     }
   }
 
-  public VerifyDeviceResponse verifySecondaryDevice(String verificationCode, AccountAttributes accountAttributes) throws IOException {
-    String responseText = makeServiceRequest(String.format(DEVICE_PATH, verificationCode), "PUT", JsonUtil.toJson(accountAttributes));
-    return JsonUtil.fromJson(responseText, VerifyDeviceResponse.class);
-  }
-
-
   private final class ResumeInfo {
     private final String contentRange;
     private final long   contentStart;
