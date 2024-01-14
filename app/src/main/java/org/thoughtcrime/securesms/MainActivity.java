@@ -43,6 +43,8 @@ import org.thoughtcrime.securesms.util.SplashScreenUtil;
 import org.thoughtcrime.securesms.util.TextSecurePreferences;
 import org.thoughtcrime.securesms.util.WindowUtil;
 
+import static im.molly.unifiedpush.util.UnifiedPushHelper.registerAppWithDialogIfNeeded;
+
 public class MainActivity extends PassphraseRequiredActivity implements VoiceNoteMediaControllerOwner {
 
   private static final String KEY_STARTING_TAB      = "STARTING_TAB";
@@ -124,6 +126,7 @@ public class MainActivity extends PassphraseRequiredActivity implements VoiceNot
             .getVitalsState()
             .subscribe(this::presentVitalsState)
     );
+    registerAppWithDialogIfNeeded(this);
   }
 
   @SuppressLint("NewApi")
