@@ -59,7 +59,9 @@ class UnifiedPushRefreshJob private constructor(parameters: Parameters) : BaseJo
 
     // Else : we try to use UnifiedPush
     UnifiedPushHelper.checkDistributorPresence(context)
-    when (val status = SignalStore.unifiedpush.status) {
+    val status = SignalStore.unifiedpush.status
+    Log.d(TAG, "UnifiedPush Status: $status")
+    when (status) {
       // Should not occur
       UnifiedPushStatus.DISABLED,
       UnifiedPushStatus.UNKNOWN -> Log.e(TAG, "UnifiedPush setup should not be in this state here : $status.")
