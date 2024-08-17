@@ -22,7 +22,7 @@ class UnifiedPushReceiver : MessagingReceiver() {
   private val EXECUTOR = SerialMonoLifoExecutor(SignalExecutors.UNBOUNDED)
 
   override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
-    Log.d(TAG, "New endpoint: $endpoint")
+    Log.d(TAG, "New endpoint !")
     if (SignalStore.unifiedpush.endpoint != endpoint) {
       SignalStore.unifiedpush.endpoint = endpoint
       AppDependencies.jobManager.add(UnifiedPushRefreshJob())
