@@ -30,6 +30,7 @@ import org.whispersystems.signalservice.api.account.PniKeyDistributionRequest;
 import org.whispersystems.signalservice.api.account.PreKeyCollection;
 import org.whispersystems.signalservice.api.account.PreKeyUpload;
 import org.whispersystems.signalservice.api.archive.ArchiveApi;
+import org.whispersystems.signalservice.api.archive.RemoteArchiveApi;
 import org.whispersystems.signalservice.api.crypto.ProfileCipher;
 import org.whispersystems.signalservice.api.crypto.ProfileCipherOutputStream;
 import org.whispersystems.signalservice.api.crypto.SealedSenderAccess;
@@ -1052,7 +1053,7 @@ public class SignalServiceAccountManager {
   }
 
   public ArchiveApi getArchiveApi() {
-    return ArchiveApi.create(pushServiceSocket, configuration.getBackupServerPublicParams(), credentials.getAci());
+    return RemoteArchiveApi.create(pushServiceSocket, configuration.getBackupServerPublicParams(), credentials.getAci());
   }
 
   public KeysApi getKeysApi() {

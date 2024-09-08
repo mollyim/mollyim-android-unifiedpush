@@ -485,6 +485,10 @@ object BackupRepository {
       .then { info -> getCdnReadCredentials(info.cdn ?: Cdn.CDN_3.cdnNumber).map { it.headers to info } }
       .map { pair ->
         val (cdnCredentials, info) = pair
+        if (info.cdn!! < 0) {
+          //TODO local logic to download backup file
+          return@map NetworkResult.Success(Unit)
+        }
         val messageReceiver = AppDependencies.signalServiceMessageReceiver
         messageReceiver.retrieveBackup(info.cdn!!, cdnCredentials, "backups/${info.backupDir}/${info.backupName}", destination, listener)
       } is NetworkResult.Success
@@ -501,6 +505,10 @@ object BackupRepository {
       .then { info -> getCdnReadCredentials(info.cdn ?: Cdn.CDN_3.cdnNumber).map { it.headers to info } }
       .then { pair ->
         val (cdnCredentials, info) = pair
+        if (info.cdn!! < 0) {
+          //TODO local logic to get last modification time -> change now()
+          return@then NetworkResult.Success(ZonedDateTime.now())
+        }
         val messageReceiver = AppDependencies.signalServiceMessageReceiver
         NetworkResult.fromFetch {
           messageReceiver.getCdnLastModifiedTime(info.cdn!!, cdnCredentials, "backups/${info.backupDir}/${info.backupName}")
