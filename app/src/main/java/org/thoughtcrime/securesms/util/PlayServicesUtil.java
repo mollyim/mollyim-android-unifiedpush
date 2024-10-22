@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
-import androidx.annotation.NonNull;
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -24,7 +22,7 @@ public class PlayServicesUtil {
     TRANSIENT_ERROR
   }
 
-  public static @NonNull PlayServicesStatus getPlayServicesStatus(Context context) {
+  public static PlayServicesStatus getPlayServicesStatus(Context context) {
     int gcmStatus = 0;
 
     try {
