@@ -1,17 +1,13 @@
 package org.thoughtcrime.securesms.components.settings.app.notifications
 
 import android.net.Uri
-import org.thoughtcrime.securesms.keyvalue.SettingsValues.NotificationDeliveryMethod
 
 data class NotificationsSettingsState(
   val messageNotificationsState: MessageNotificationsState,
   val callNotificationsState: CallNotificationsState,
   val notifyWhileLocked: Boolean,
   val canEnableNotifyWhileLocked: Boolean,
-  val notifyWhenContactJoinsSignal: Boolean,
-  val isLinkedDevice: Boolean,
-  val preferredNotificationMethod: NotificationDeliveryMethod,
-  val canReceiveFcm: Boolean
+  val notifyWhenContactJoinsSignal: Boolean
 )
 
 data class MessageNotificationsState(
