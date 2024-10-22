@@ -114,12 +114,9 @@ class NotificationsSettingsViewModel(private val sharedPreferences: SharedPrefer
 
   fun setPreferredNotificationMethod(method: NotificationDeliveryMethod) {
     SignalStore.settings.preferredNotificationMethod = method
-    TextSecurePreferences.setPromptedOptimizeDoze(AppDependencies.application, false)
     ApplicationContext.getInstance().updatePushNotificationServices()
     AppDependencies.resetNetwork(true)
-    // Avoid calling refresh() here to prevent updating canReceiveFcm
-    // while the FCM token is still being refreshed.
-    store.update { it.copy(preferredNotificationMethod = method) }
+    refresh()
   }
 
   val fcmState get() = PlayServicesUtil.getPlayServicesStatus(AppDependencies.application)

@@ -18,8 +18,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -82,11 +80,6 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
 
   private lateinit var viewModel: NotificationsSettingsViewModel
 
-  private val args: NotificationsSettingsFragmentArgs by navArgs()
-
-  private val layoutManager: LinearLayoutManager?
-    get() = recyclerView?.layoutManager as? LinearLayoutManager
-
   override fun onResume() {
     super.onResume()
     viewModel.refresh()
@@ -117,9 +110,6 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
 
     viewModel.state.observe(viewLifecycleOwner) {
       adapter.submitList(getConfiguration(it).toMappingModelList())
-      if (args.scrollToPushServices) {
-        layoutManager?.scrollToPosition(adapter.itemCount - 1)
-      }
     }
 
     EventBus.getDefault().registerForLifecycle(subscriber = this, lifecycleOwner = viewLifecycleOwner)
@@ -326,6 +316,7 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
         onToggle = { isChecked ->
           if (isChecked && !state.canEnableNotifyWhileLocked) {
             MaterialAlertDialogBuilder(requireContext())
+              .setTitle(R.string.NotificationsSettingsFragment__push_notifications_unavailable)
               .setMessage(R.string.NotificationsSettingsFragment__sorry_this_feature_requires_push_notifications_delivered_via_fcm_or_unifiedpush)
               .setPositiveButton(android.R.string.ok, null)
               .show()
@@ -350,7 +341,7 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
       sectionHeaderPref(R.string.NotificationsSettingsFragment__push_notifications)
 
       textPref(
-        summary = DSLSettingsText.from(R.string.NotificationsSettingsFragment__select_your_preferred_service_for_push_notifications)
+        summary = DSLSettingsText.from(R.string.NotificationsSettingsFragment__preferred_method_for_receiving_notifications_from_the_signal_service)
       )
 
       val showAlertIcon = when (state.preferredNotificationMethod) {
@@ -358,10 +349,11 @@ class NotificationsSettingsFragment : DSLSettingsFragment(R.string.preferences__
         NotificationDeliveryMethod.WEBSOCKET -> false
       }
       radioListPref(
-        title = DSLSettingsText.from(R.string.NotificationsSettingsFragment__delivery_service),
+        title = DSLSettingsText.from(R.string.NotificationsSettingsFragment__delivery_method),
         listItems = notificationMethodLabels,
         selected = notificationMethodValues.indexOf(state.preferredNotificationMethod),
-        iconEnd = if (showAlertIcon) DSLSettingsIcon.from(R.drawable.ic_alert, R.color.signal_alert_primary) else null,
+        isEnabled = !state.isLinkedDevice,  // MOLLY: TODO
+        iconEnd = if (showAlertIcon) DSLSettingsIcon.from(R.drawable.ic_alert) else null,
         onSelected = {
           onNotificationMethodChanged(notificationMethodValues[it], state.preferredNotificationMethod)
         }
