@@ -338,8 +338,9 @@ class AccountValues internal constructor(store: KeyValueStore, context: Context)
     }
 
   /** When we last set the [fcmToken] */
-  val fcmTokenLastSetTime: Long
+  var fcmTokenLastSetTime: Long
     get() = getLong(KEY_FCM_TOKEN_LAST_SET_TIME, 0)
+    set(value) = putLong(KEY_FCM_TOKEN_LAST_SET_TIME, value)
 
   /** Whether or not the user is registered with the Signal service. */
   val isRegistered: Boolean

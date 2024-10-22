@@ -86,7 +86,7 @@ public class RefreshAttributesJob extends BaseJob {
     }
 
     int       registrationId              = SignalStore.account().getRegistrationId();
-    boolean   fetchesMessages             = !SignalStore.account().isFcmEnabled();
+    boolean   fetchesMessages             = !SignalStore.account().isFcmEnabled() || SignalStore.internal().isWebsocketModeForced();
     byte[]    unidentifiedAccessKey       = UnidentifiedAccess.deriveAccessKeyFrom(ProfileKeyUtil.getSelfProfileKey());
     boolean   universalUnidentifiedAccess = TextSecurePreferences.isUniversalUnidentifiedAccess(context);
     String    registrationLockV2          = null;
@@ -105,7 +105,6 @@ public class RefreshAttributesJob extends BaseJob {
 
     AccountAttributes.Capabilities capabilities = AppCapabilities.getCapabilities((svrValues.hasPin() && !svrValues.hasOptedOut()) || SignalStore.storageService().hasStorageKeyFromPrimary());
     Log.i(TAG, "Calling setAccountAttributes() reglockV2? " + !TextUtils.isEmpty(registrationLockV2) + ", pin? " + svrValues.hasPin() +
-               ", fetchesMessages? " + fetchesMessages +
                "\n    Recovery password? " + !TextUtils.isEmpty(recoveryPassword) +
                "\n    Phone number discoverable : " + phoneNumberDiscoverable +
                "\n    Device Name : " + (encryptedDeviceName != null) +

@@ -28,7 +28,7 @@ class VitalsViewModel(private val context: Application) : AndroidViewModel(conte
     vitalsState = checkSubject
       .subscribeOn(Schedulers.io())
       .observeOn(Schedulers.io())
-      .throttleFirst(15, TimeUnit.MINUTES)
+      .throttleLast(15, TimeUnit.MINUTES)
       .switchMapSingle {
         checkHeuristics()
       }
