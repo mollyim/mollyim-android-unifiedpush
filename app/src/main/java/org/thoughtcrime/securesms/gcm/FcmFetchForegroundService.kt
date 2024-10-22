@@ -124,12 +124,17 @@ class FcmFetchForegroundService : Service() {
 
   override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
     Log.d(TAG, "onStartCommand()")
+
+    if (KeyCachingService.isLocked()) {
+      stopForeground(STOP_FOREGROUND_REMOVE)
+      return START_NOT_STICKY
+    }
+
     postForegroundNotification()
 
-    val appLocked = KeyCachingService.isLocked()
-    return if (appLocked || (intent != null && intent.getBooleanExtra(KEY_STOP_SELF, false))) {
+    return if (intent != null && intent.getBooleanExtra(KEY_STOP_SELF, false)) {
       WakeLockUtil.release(wakeLock, WAKELOCK_TAG)
-      stopForeground(STOP_FOREGROUND_REMOVE)
+      stopForeground(true)
       stopSelf()
       START_NOT_STICKY
     } else {
@@ -143,7 +148,7 @@ class FcmFetchForegroundService : Service() {
   private fun postForegroundNotification() {
     startForeground(
       NotificationIds.FCM_FETCH,
-      NotificationCompat.Builder(this, NotificationChannels.BACKGROUND)
+      NotificationCompat.Builder(this, NotificationChannels.getInstance().OTHER)
         .setSmallIcon(R.drawable.ic_notification)
         .setContentTitle(getString(R.string.BackgroundMessageRetriever_checking_for_messages))
         .setCategory(NotificationCompat.CATEGORY_SERVICE)
