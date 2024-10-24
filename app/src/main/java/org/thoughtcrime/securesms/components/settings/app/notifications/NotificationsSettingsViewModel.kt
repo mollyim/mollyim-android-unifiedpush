@@ -15,6 +15,7 @@ import org.thoughtcrime.securesms.notifications.DeviceSpecificNotificationConfig
 import org.thoughtcrime.securesms.notifications.NotificationChannels
 import org.thoughtcrime.securesms.notifications.SlowNotificationHeuristics
 import org.thoughtcrime.securesms.preferences.widgets.NotificationPrivacyPreference
+import org.thoughtcrime.securesms.util.PlayServicesUtil
 import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.livedata.Store
 
@@ -121,9 +122,7 @@ class NotificationsSettingsViewModel(private val sharedPreferences: SharedPrefer
     store.update { it.copy(preferredNotificationMethod = method) }
   }
 
-  fun setPlayServicesErrorCode(errorCode: Int?) {
-    store.update { it.copy(playServicesErrorCode = errorCode) }
-  }
+  val fcmState get() = PlayServicesUtil.getPlayServicesStatus(AppDependencies.application)
 
   /**
    * @param currentState If provided and [calculateSlowNotifications] = false, then we will copy the slow notification state from it
@@ -162,8 +161,7 @@ class NotificationsSettingsViewModel(private val sharedPreferences: SharedPrefer
     notifyWhenContactJoinsSignal = SignalStore.settings.isNotifyWhenContactJoinsSignal,
     isLinkedDevice = SignalStore.account.isLinkedDevice,
     preferredNotificationMethod = SignalStore.settings.preferredNotificationMethod,
-    playServicesErrorCode = currentState?.playServicesErrorCode,
-    canReceiveFcm = SignalStore.account.canReceiveFcm
+    canReceiveFcm = SignalStore.account.canReceiveFcm,
   )
 
   private fun canEnableNotifications(): Boolean {

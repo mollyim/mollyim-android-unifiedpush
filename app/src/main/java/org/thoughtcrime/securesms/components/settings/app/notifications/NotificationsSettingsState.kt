@@ -11,7 +11,6 @@ data class NotificationsSettingsState(
   val notifyWhenContactJoinsSignal: Boolean,
   val isLinkedDevice: Boolean,
   val preferredNotificationMethod: NotificationDeliveryMethod,
-  val playServicesErrorCode: Int?,
   val canReceiveFcm: Boolean
 )
 

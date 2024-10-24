@@ -40,9 +40,16 @@ public class PlayServicesUtil {
       case ConnectionResult.SUCCESS:
         return PlayServicesStatus.SUCCESS;
       case ConnectionResult.SERVICE_VERSION_UPDATE_REQUIRED:
-        if (!isGooglePlayPackageEnabled(context)) {
-          return PlayServicesStatus.MISSING;
+        try {
+          ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo("com.google.android.gms", 0);
+
+          if (applicationInfo != null && !applicationInfo.enabled) {
+            return PlayServicesStatus.MISSING;
+          }
+        } catch (PackageManager.NameNotFoundException e) {
+          Log.w(TAG, e);
         }
+
         return PlayServicesStatus.NEEDS_UPDATE;
       case ConnectionResult.SERVICE_DISABLED:
         return PlayServicesStatus.DISABLED;
@@ -56,13 +63,4 @@ public class PlayServicesUtil {
     }
   }
 
-  public static boolean isGooglePlayPackageEnabled(Context context) {
-    try {
-      ApplicationInfo applicationInfo = context.getPackageManager().getApplicationInfo("com.google.android.gms", 0);
-      return applicationInfo.enabled;
-    } catch (PackageManager.NameNotFoundException e) {
-      Log.w(TAG, e);
-      return false;
-    }
-  }
 }
