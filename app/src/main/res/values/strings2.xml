@@ -167,4 +167,5 @@
     <string name="NotificationMethod__label_unifiedpush">UnifiedPush</string>
     <string name="NotificationMethod__label_fcm">Google Services</string>
     <string name="NotificationMethod__label_websocket">WebSocket</string>
+    <string name="this_version_of_molly_is_deprecated">This version of Molly is deprecated: UnifiedPush support has been merged into the main app. Please do a backup of your chats and install Molly or Molly-FOSS.</string>
 </resources>

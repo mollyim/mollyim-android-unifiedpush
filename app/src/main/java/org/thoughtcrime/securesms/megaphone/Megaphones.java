@@ -3,6 +3,7 @@ package org.thoughtcrime.securesms.megaphone;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.text.TextUtils;
 
@@ -115,6 +116,7 @@ public final class Megaphones {
     return new LinkedHashMap<>() {{
       put(Event.PINS_FOR_ALL, new PinsForAllSchedule());
       put(Event.CLIENT_DEPRECATED, SignalStore.misc().isClientDeprecated() ? ALWAYS : NEVER);
+      put(Event.FLAVOR_DEPRECATED, ALWAYS);
       put(Event.NOTIFICATIONS, shouldShowNotificationsMegaphone(context) ? RecurringSchedule.every(TimeUnit.DAYS.toMillis(30)) : NEVER);
       put(Event.GRANT_FULL_SCREEN_INTENT, shouldShowGrantFullScreenIntentPermission(context) ? RecurringSchedule.every(TimeUnit.DAYS.toMillis(3)) : NEVER);
       put(Event.BACKUP_SCHEDULE_PERMISSION, shouldShowBackupSchedulePermissionMegaphone(context) ? RecurringSchedule.every(TimeUnit.DAYS.toMillis(3)) : NEVER);
@@ -155,6 +157,8 @@ public final class Megaphones {
         return buildClientDeprecatedMegaphone(context);
       case ONBOARDING:
         return buildOnboardingMegaphone();
+      case FLAVOR_DEPRECATED:
+        return buildFlavorDeprecatedMegaphone(context);
       case NOTIFICATIONS:
         return buildNotificationsMegaphone(context);
       case ADD_A_PROFILE_PHOTO:
@@ -271,6 +275,17 @@ public final class Megaphones {
 
   private static @NonNull Megaphone buildOnboardingMegaphone() {
     return new Megaphone.Builder(Event.ONBOARDING, Megaphone.Style.ONBOARDING)
+        .build();
+  }
+
+  private static @NonNull Megaphone buildFlavorDeprecatedMegaphone(@NonNull Context context) {
+    return new Megaphone.Builder(Event.FLAVOR_DEPRECATED, Megaphone.Style.BASIC)
+        .setTitle(R.string.ClientDeprecatedActivity_warning)
+        .setBody(R.string.this_version_of_molly_is_deprecated)
+        .setImage(R.drawable.ic_connectivity_warning)
+        .setActionButton(R.string.StickerPackPreviewActivity_install, (megaphone, controller) ->
+            controller.onMegaphoneNavigationRequested(new Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.install_url)))))
+        .setSecondaryButton(R.string.NotificationsMegaphone_not_now, (megaphone, controller) -> controller.onMegaphoneSnooze(Event.FLAVOR_DEPRECATED))
         .build();
   }
 
@@ -568,6 +583,7 @@ public final class Megaphones {
     PINS_FOR_ALL("pins_for_all"),
     PIN_REMINDER("pin_reminder"),
     CLIENT_DEPRECATED("client_deprecated"),
+    FLAVOR_DEPRECATED("flavor_deprecated"),
     ONBOARDING("onboarding"),
     NOTIFICATIONS("notifications"),
     ADD_A_PROFILE_PHOTO("add_a_profile_photo"),
