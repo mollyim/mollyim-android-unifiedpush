@@ -7,15 +7,14 @@ import org.signal.core.util.Base64
 import org.signal.core.util.logging.Log
 import org.signal.libsignal.protocol.util.KeyHelper
 import org.thoughtcrime.securesms.AppCapabilities
-import org.thoughtcrime.securesms.database.loaders.DeviceListLoader
 import org.thoughtcrime.securesms.dependencies.AppDependencies
-import org.thoughtcrime.securesms.devicelist.Device
 import org.thoughtcrime.securesms.keyvalue.PhoneNumberPrivacyValues
 import org.thoughtcrime.securesms.keyvalue.SignalStore
+import org.thoughtcrime.securesms.linkdevice.Device
+import org.thoughtcrime.securesms.linkdevice.LinkDeviceRepository
 import org.thoughtcrime.securesms.push.AccountManagerFactory
 import org.thoughtcrime.securesms.registration.data.RegistrationRepository
 import org.thoughtcrime.securesms.registration.secondary.DeviceNameCipher
-import org.thoughtcrime.securesms.util.TextSecurePreferences
 import org.thoughtcrime.securesms.util.Util
 import org.whispersystems.signalservice.api.account.AccountAttributes
 import org.whispersystems.signalservice.api.push.SignalServiceAddress
@@ -48,7 +47,7 @@ class MollySocketLinkedDevice(val context: Context) {
     val device = SignalStore.unifiedpush.device ?: return false
     val devices: List<Device>?
     try {
-      devices = DeviceListLoader(context, AppDependencies.signalServiceAccountManager).loadInBackground()
+      devices = LinkDeviceRepository.loadDevices()
     } catch (e: IOException) {
       Log.e(TAG, "Encountered an IOException", e)
       return null
@@ -68,7 +67,7 @@ class MollySocketLinkedDevice(val context: Context) {
       val password = Util.getSecret(18)
 
       val deviceId = verifyNewDevice(number, password)
-      TextSecurePreferences.setMultiDevice(context, true)
+      SignalStore.account.hasLinkedDevices = true
 
       SignalStore.unifiedpush.device = MollyDevice(
         uuid = SignalStore.account.aci.toString(),
@@ -113,7 +112,7 @@ class MollySocketLinkedDevice(val context: Context) {
     val pniPreKeyCollection = RegistrationRepository.generateSignedAndLastResortPreKeys(SignalStore.account.pniIdentityKey, SignalStore.account.pniPreKeys)
 
     return accountManager.finishNewDeviceRegistration(
-        verificationCode,
+        verificationCode.verificationCode,
         accountAttributes,
         aciPreKeyCollection, pniPreKeyCollection,
         null
